@@ -23,16 +23,25 @@ def fetch_job_listings(geoareaid, page_limit=1):
             for job_ad in job_ads:
                 title = job_ad.find('div', class_='jobad-element-menu-share')['data-share-title']
                 url = job_ad.find('div', class_='jobad-element-menu-share')['data-share-url']
+                
                 # Extracting location
                 location_tag = job_ad.find('div', class_='jobad-element-area')
                 location = location_tag.find('span', class_='jix_robotjob--area').text.strip() if location_tag and location_tag.find('span', class_='jix_robotjob--area') else 'unknown'
+                
+                # Extracting published date
                 published_tag = job_ad.find('time')
                 published_date = published_tag['datetime'] if published_tag else 'unknown'
-                job_listings.append([title, published_date, location, url])
+                
+                # Extracting description
+                description_tag = job_ad.find('div', class_='PaidJob-inner')
+                description = description_tag.find('p').get_text() if description_tag else 'No description available'
+                
+                job_listings.append({'title': title, 'published_date': published_date, 'location': location, 'url': url, 'description': description})
         else:
             break
     
     return job_listings
+
 
 # Example usage
 geoareaid = ''
