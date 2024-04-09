@@ -57,6 +57,6 @@ job_listings = fetch_job_listings(geoareaid, page_limit=100)
 df = pd.DataFrame(job_listings, columns=['Entry_id', 'Title', 'Description', 'Published Date', 'Location', 'URL'])
 
 # saving to csv
-df.to_csv('job_listings_area.csv', index=False)
+df.to_csv('job_listings_full.csv', index=False)
 
 df.head()
