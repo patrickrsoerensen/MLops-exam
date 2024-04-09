@@ -2,7 +2,7 @@ name: Fetch Job Listings
 
 on:
   schedule:
-    # Set the schedule when you want to run the script (e.g., every day at 00:00 UTC)
+    # Set the schedule run the script every day at 00:00 UTC
     - cron: '0 0 * * *'
 
 jobs:
