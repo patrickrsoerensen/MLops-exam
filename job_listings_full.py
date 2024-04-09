@@ -36,7 +36,7 @@ def fetch_job_listings(geoareaid, page_limit=1):
                 description_tag = job_ad.find('div', class_='PaidJob-inner')
                 description = description_tag.find('p').get_text() if description_tag else 'No description available'
                 
-                job_listings.append({'title': title, 'published_date': published_date, 'location': location, 'url': url, 'description': description})
+                job_listings.append({ title, description, published_date, location, url})
         else:
             break
     
@@ -46,7 +46,7 @@ def fetch_job_listings(geoareaid, page_limit=1):
 # Example usage
 geoareaid = ''
 job_listings = fetch_job_listings(geoareaid, page_limit=1000)
-df = pd.DataFrame(job_listings, columns=['Title', 'Published Date', 'Location', 'URL'])
+df = pd.DataFrame(job_listings, columns=['Title', 'Description', 'Published Date', 'Location', 'URL'])
 
 # saving to csv
 df.to_csv('job_listings_full.csv', index=False)
