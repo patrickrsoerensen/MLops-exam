@@ -23,6 +23,7 @@ def fetch_job_listings(geoareaid, page_limit=1):
             for job_ad in job_ads:
                 title = job_ad.find('div', class_='jobad-element-menu-share')['data-share-title']
                 url = job_ad.find('div', class_='jobad-element-menu-share')['data-share-url']
+                entry_id = url.replace("https://www.jobindex.dk/vis-job/", "")  # Extracting ID
                 
                 # Extracting location
                 location_tag = job_ad.find('div', class_='jobad-element-area')
@@ -36,17 +37,18 @@ def fetch_job_listings(geoareaid, page_limit=1):
                 description_tag = job_ad.find('div', class_='PaidJob-inner')
                 description = description_tag.find('p').get_text() if description_tag else 'No description available'
                 
-                job_listings.append([title, description, published_date, location, url])
+                job_listings.append([entry_id, title, description, published_date, location, url])  # Adding entry_id to job listing
         else:
             break
     
     return job_listings
 
 
+
 # Example usage
 geoareaid = ''
 job_listings = fetch_job_listings(geoareaid, page_limit=1000)
-df = pd.DataFrame(job_listings, columns=['Title', 'Description', 'Published Date', 'Location', 'URL'])
+df = pd.DataFrame(job_listings, columns=['Entry_id', 'Title', 'Description', 'Published Date', 'Location', 'URL'])
 
 # saving to csv
 df.to_csv('job_listings_full.csv', index=False)

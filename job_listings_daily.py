@@ -26,16 +26,23 @@ def fetch_job_listings(geoareaid, page_limit=1):
             for job_ad in job_ads:
                 title = job_ad.find('div', class_='jobad-element-menu-share')['data-share-title']
                 url = job_ad.find('div', class_='jobad-element-menu-share')['data-share-url']
+                entry_id = url.replace("https://www.jobindex.dk/vis-job/", "")  # Extracting ID
+                
                 # Extracting location
                 location_tag = job_ad.find('div', class_='jobad-element-area')
                 location = location_tag.find('span', class_='jix_robotjob--area').text.strip() if location_tag and location_tag.find('span', class_='jix_robotjob--area') else 'unknown'
+                
+                # Extracting published date
                 published_tag = job_ad.find('time')
                 published_date = published_tag['datetime'] if published_tag else 'unknown'
                 
+                # Extracting description
+                description_tag = job_ad.find('div', class_='PaidJob-inner')
+                description = description_tag.find('p').get_text() if description_tag else 'No description available'
 
                 # Compare published date with yesterday's date
                 if published_date.startswith(yesterday_date):
-                    job_listings.append([title, published_date, location, url])
+                    job_listings.append([entry_id, title, description, published_date, location, url]) 
                 else:
                     # Since the posts are ordered by date, if we hit a post that is not from yesterday, we can stop.
                     break
@@ -47,7 +54,7 @@ def fetch_job_listings(geoareaid, page_limit=1):
 # Gettings yesterdays job listings
 geoareaid = ''
 job_listings = fetch_job_listings(geoareaid, page_limit=100)
-df = pd.DataFrame(job_listings, columns=['Title', 'Published Date', 'Location', 'URL'])
+df = pd.DataFrame(job_listings, columns=['Entry_id', 'Title', 'Description', 'Published Date', 'Location', 'URL'])
 
 # saving to csv
 df.to_csv('job_listings_area.csv', index=False)
