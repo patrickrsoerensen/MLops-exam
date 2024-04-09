@@ -24,4 +24,4 @@ jobs:
           pip install requests beautifulsoup4 pandas
 
       - name: Run script
-        run: python job_listings_area.py
+        run: python job_listings_daily.py
