@@ -44,7 +44,7 @@ def fetch_job_listings(geoareaid, page_limit=1):
     
     return job_listings
 
-# Example usage
+# Gettings yesterdays job listings in North Jutland
 geoareaid = '3'
 job_listings = fetch_job_listings(geoareaid, page_limit=10)
 df = pd.DataFrame(job_listings, columns=['Title', 'Published Date', 'Location', 'URL'])
