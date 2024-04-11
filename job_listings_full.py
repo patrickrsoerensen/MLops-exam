@@ -47,7 +47,7 @@ def fetch_job_listings(geoareaid, page_limit=1):
 # Function to remove special characters from a string
 def remove_special_characters(text):
     # Define a regular expression pattern to match non-alphanumeric characters
-    pattern = r'[^a-åA-Å0-9\s]'  # Matches any character that is not a letter, digit, or whitespace
+    pattern = r'[^a-zA-Z0-9\sæøåÆØÅ]'  # Matches any character that is not a letter, digit, or whitespace
 
     # Use the sub() function from the re module to replace matched characters with an empty string
     clean_text = re.sub(pattern, '', str(text))  # Convert NaN to string before applying the function
