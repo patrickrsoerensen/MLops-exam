@@ -66,8 +66,27 @@ geoareaid = ''
 job_listings = fetch_job_listings(geoareaid, page_limit=100)
 df = pd.DataFrame(job_listings, columns=['Entry_id', 'Title', 'Description', 'Published Date', 'Location', 'URL'])
 
+<<<<<<< HEAD
 # Remove special characters from the "Title" column
 df['Title'] = df['Title'].apply(remove_special_characters)
+=======
+# saving to csv
+csv_filename = 'job_listings_full.csv'
+df.to_csv(csv_filename, index=False)
+
+# URL to upload the CSV file
+github_raw_url = 'https://raw.githubusercontent.com/jogfx/MLops-exam/main/'
+
+# Upload the CSV file to GitHub
+with open(csv_filename, 'rb') as file:
+    response = requests.put(github_raw_url + csv_filename, data=file)
+
+# Check if upload was successful
+if response.status_code == 200:
+    print("CSV file uploaded successfully to GitHub.")
+else:
+    print("Failed to upload CSV file to GitHub. Status code:", response.status_code)
+>>>>>>> cb0e1b4444f19a1f317a5375204380b2987254c3
 
 # Remove special characters from the "Description" column, handling NaN values
 df['Description'] = df['Description'].fillna('').apply(remove_special_characters)
