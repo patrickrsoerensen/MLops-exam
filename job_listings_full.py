@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 import pandas as pd
+import re
 
 def fetch_job_listings(geoareaid, page_limit=1):
     base_url = 'https://www.jobindex.dk/jobsoegning.json'
@@ -43,14 +44,27 @@ def fetch_job_listings(geoareaid, page_limit=1):
     
     return job_listings
 
+# Function to remove special characters from a string
+def remove_special_characters(text):
+    # Define a regular expression pattern to match non-alphanumeric characters
+    pattern = r'[^a-åA-Å0-9\s]'  # Matches any character that is not a letter, digit, or whitespace
 
+    # Use the sub() function from the re module to replace matched characters with an empty string
+    clean_text = re.sub(pattern, '', str(text))  # Convert NaN to string before applying the function
+    return clean_text
 
 # Example usage
 geoareaid = ''
 job_listings = fetch_job_listings(geoareaid, page_limit=1000)
 df = pd.DataFrame(job_listings, columns=['Entry_id', 'Title', 'Description', 'Published Date', 'Location', 'URL'])
 
+# Remove special characters from the "Title" column
+df['Title'] = df['Title'].apply(remove_special_characters)
+
+# Remove special characters from the "Description" column, handling NaN values
+df['Description'] = df['Description'].fillna('').apply(remove_special_characters)
+
 # saving to csv
-df.to_csv('job_listings_full.csv', index=False)
+df.to_csv('job_listings_cleaned.csv', index=False)
 
 df.head()
